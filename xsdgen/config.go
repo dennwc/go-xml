@@ -40,6 +40,8 @@ type Config struct {
 	// if populated, only types that are true in this map
 	// will be selected.
 	allowTypes map[xml.Name]bool
+
+	noFlatten bool // disables XML type flattening
 }
 
 type typeTransform func(xsd.Schema, xsd.Type) xsd.Type
@@ -86,6 +88,16 @@ func Namespaces(xmlns ...string) Option {
 		prev := cfg.namespaces
 		cfg.namespaces = xmlns
 		return Namespaces(prev...)
+	}
+}
+
+// Flatten allows to set a type flattening for XML type definitions
+// (enabled by default).
+func Flatten(v bool) Option {
+	return func(cfg *Config) Option {
+		prev := cfg.noFlatten
+		cfg.noFlatten = !v
+		return Flatten(!prev)
 	}
 }
 

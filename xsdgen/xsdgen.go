@@ -368,6 +368,12 @@ func (cfg *Config) flatten(types map[xml.Name]xsd.Type) []xsd.Type {
 	push := func(t xsd.Type) {
 		result = append(result, t)
 	}
+	if cfg.noFlatten {
+		for _, t := range types {
+			push(t)
+		}
+		return result
+	}
 	for _, t := range types {
 		if xsd.XMLName(t).Local == "_self" {
 			continue
